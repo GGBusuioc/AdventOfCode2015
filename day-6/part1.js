@@ -6,14 +6,9 @@ let dx_to
 let dy_from
 let dy_to
 
-// const fillArray = (dx_width, dx_height, dy_width, dy_height, val = null) =>
-//     // dx line
-//     Array.from({ length: dx_width }).map(() =>
-//     // dy line
-//     Array.from({ length: dx_height }).fill(val)
-//     );
+let my2DArray = Array.from(Array(1000), () => new Array(1000).fill(0));
 
-const my2DArray = Array.from(Array(1000), () => new Array(1000).fill(0));
+let lightsOnCount = 0
 
 
 const fillArray = (dx_from, dx_to, dy_from, dy_to, newVal) => {
@@ -23,9 +18,6 @@ const fillArray = (dx_from, dx_to, dy_from, dy_to, newVal) => {
         }
     }
 }
-
-// initially lights are turned off 
-
 
 fs.readFileSync("./data.txt", "utf8")
     .split(/\r?\n/)
@@ -43,22 +35,21 @@ fs.readFileSync("./data.txt", "utf8")
             [dx_to, dy_to] = values[4].split(',').map(Number);
         }
 
-        if ( values[0] === 'turnon' ) {
+        if ( command === 'turnon' ) {
             fillArray(dx_from, dx_to, dy_from, dy_to, (x) => 1);
         }
 
-        if ( values[0] === 'turnoff' ) {
+        if ( command === 'turnoff' ) {
             fillArray(dx_from, dx_to, dy_from, dy_to, (x) => 0);
         }
 
-        if ( values[0] === 'toggle' ) {
+        if ( command === 'toggle' ) {
             fillArray(dx_from, dx_to, dy_from, dy_to, (x) => 1-x);
         }
-
         //console.log(`${command} ${dx_from} ${dx_to} ${dy_from} ${dy_to}`)
+
+       
 })
+lightsOnCount = my2DArray.reduce((accumulater, currentValue) => currentValue.filter(c => c === 1).length + accumulater, 0)
 
-const lightsOnCount = my2DArray.reduce((accumulater, currentValue) => currentValue.filter(c => c === 1).length + accumulater, 0)
-
-//console.log(typeof(dx_from))
 console.log(lightsOnCount)
